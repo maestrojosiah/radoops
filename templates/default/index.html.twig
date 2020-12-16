@@ -27,7 +27,7 @@
             </li>
             {% for category in data.categories %}
               <li class="nav-item">
-                <a class="nav-link" href="{{path('product_category',{'category':category})}}">{{category|capitalize}}</a>
+                <a class="nav-link" href="{{path('product_category',{'category':category})}}">{{category}}</a>
               </li>
             {% endfor %}
 
