@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Purchase</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ purchase.id }}</td>
+            </tr>
+            <tr>
+                <th>Purchasedon</th>
+                <td>{% if purchase.purchasedOn %}{{ purchase.purchasedOn|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('purchase_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

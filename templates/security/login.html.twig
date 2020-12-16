@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block carousel %}{% endblock %}
+{% block body %}
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+    <!--Grid row-->
+      <div class="row wow fadeIn">
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+              {% if error %}
+                  <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+              {% endif %}
+
+              {% if app.user %}
+                  <div class="mb-3">
+                      You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                  </div>
+              {% endif %}
+            <form method="post" class="form-horizontal">
+              <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Username/Email</label>
+                <div class="col-sm-10">
+                  <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                <div class="col-sm-10">
+                  <input type="password" name="password" id="inputPassword" class="form-control" required>
+                </div>
+              </div>
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox mb-3">
+                      <label>
+                          <input type="checkbox" name="_remember_me"> Remember me
+                      </label>
+                  </div>
+
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-default">Login</button>
+                </div>
+              </div>
+            </form>
+            <a href="{{ path('app_register') }}"> Register </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+{% endblock %}

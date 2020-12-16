@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block carousel %}{% endblock %}
+{% block body %}
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+    <h4>Edit {{presentation.description}}</h4>
+    <!--Grid row-->
+      <div class="row wow fadeIn">
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          {{ form_start(edit_form, {'attr': {'class': 'login-form'}}) }}
+            <p class="login-img"><i class="arrow_carrot-right_alt "></i></p>
+            <div class="form-group">
+              <label>Image (PNG / JPEG)</label>
+              {{ form_row(edit_form.photoPath, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              {{ form_row(edit_form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description' }}) }}
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Edit Presentation</button>
+          {{ form_end(edit_form) }}
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          <h4>Image: {{presentation.description}}</h4>
+            <img style="max-height:300px;" src="{{asset(presentation.photoPath)}}" />
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+      </div>
+    </main>
+
+    <ul>
+        <li>
+            <a href="{{ path('product_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

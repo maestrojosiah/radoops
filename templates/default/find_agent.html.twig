@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+{% block carousel %}{% endblock %}
+
+{% block body %}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+          <h4>Please select the closest Place</h4>
+          <form>
+            <div class="form-group">
+              <label for="agents_residents">Our Agents</label>
+              <select class="form-control" id="agents_residents">
+                {% for agent in agents %}
+                  <option value="{{agent.residence}}">{{agent.residence}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          <!--Content-->
+          <div class="p-4">
+            <span id="agents_list"></span>
+          </div>
+          <!--Content-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <hr>
+
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+{% endblock %}
+{% block javascripts %}
+  <script>
+    $(document).on('change', '#agents_residents', function(){
+      var residence = $("#agents_residents").val();
+      $("#agents_list").text("Loading...");
+      $.ajax({
+          url:'{{ (path('list_agent')) }}',
+          type: "POST",
+          dataType: "json",
+          data: {
+            "residence": residence,
+          },
+          async: true,
+          success: function (data)
+          {
+            $("#agents_list").text("");
+            $.each(data, function( index, value ) {
+
+            $("#agents_list").append(
+            '<div class="card">' +
+
+              '<div class="view overlay">' + 
+                '<a href="#">' +
+                  '<div class="mask rgba-white-slight"></div>' +
+                '</a>' +
+              '</div>' +
+
+              '<div class="card-body text-center">' +
+                '<a href="" class="grey-text">' +
+                  '<h5>'+ value[0]+'</h5>' +
+                '</a>' +
+                '<h5>' +
+                  '<strong>' +
+                    '<a href="" class="dark-grey-text">'+ value[4] +
+                      ' <span class="badge badge-pill danger-color">'+ value[1]+'</span>' +
+                    '</a>' +
+                  '</strong>' +
+                '</h5>' +
+
+                '<h4 class="font-weight-bold blue-text">' +
+                  '<a href="http://'+ value[3]+'"><strong>'+ value[3]+'</strong></a>' +
+                '</h4>' +
+
+              '</div>' +
+            '</div>');
+
+            });            
+          },
+          error: function (xhr, status, error) {
+            console.log('error');
+          }
+      });
+
+    });
+  </script>
+{% endblock %}

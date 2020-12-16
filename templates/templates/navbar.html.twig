@@ -1,0 +1,58 @@
+  <!-- Navbar -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
+    <div class="container">
+
+      <!-- Brand -->
+      <a class="navbar-brand waves-effect" href="{{path('homepage')}}">
+        <strong class="blue-text">Radoops Kenya</strong>
+      </a>
+
+      <!-- Collapse -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Links -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <!-- Left -->
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link waves-effect" href="{{path('homepage')}}">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{{path('about')}}">About Us</a>
+          </li>
+        </ul>
+        {% if app.user and app.user.active == 1 %}
+          {% include 'templates/le_menu.html.twig' %}
+        {% endif %}
+        <!-- Right -->
+        <ul class="navbar-nav nav-flex-icons">
+          <li class="nav-item">
+            <a href="{{path('cart')}}" class="nav-link waves-effect">
+              <span id="cart_count" class="badge red z-depth-1 mr-1"> {{ my_cookies > 0 ? my_cookies|length : '0' }} </span>
+              <i class="fa fa-shopping-cart"></i>
+              <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            {% if app.user %}
+              <a href="{{path('app_logout')}}" class="nav-link border border-light rounded waves-effect">
+              <i class="fa fa-user-2"></i>Logout
+            {% else %}
+              <a href="{{path('app_login')}}" class="nav-link border border-light rounded waves-effect">
+              <i class="fa fa-user-2"></i>login
+            {% endif %}
+            </a>
+          </li>
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  <!-- Navbar -->

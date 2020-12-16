@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <!-- DataTables CSS -->
+    <link href="{{ asset('vendor/datatables-plugins/dataTables.bootstrap.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block carousel %}{% endblock %}
+{% block body %}
+  <!--Main layout-->
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+    <h3>Officials list</h3>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for official in officials %}
+            <tr>
+                <td><a href="{{ path('official_show', { 'id': official.id }) }}">{{ official.id }}</a></td>
+                <td>{{ official.title }}</td>
+                <td>{{ official.name }}</td>
+                <td>{{ official.phone }}</td>
+                <td>{{ official.email }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('official_show', { 'id': official.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('official_edit', { 'id': official.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('official_new') }}">Create a new official</a>
+        </li>
+    </ul>
+</div>
+</main>
+{% endblock %}
+{% block javascripts %}
+    <!-- DataTables JavaScript -->
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        $('#dt_tbl').DataTable({
+            responsive: true,
+            "pageLength": 10
+
+        });
+    });
+    </script>
+
+{% endblock %}

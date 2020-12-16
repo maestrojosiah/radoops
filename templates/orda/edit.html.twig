@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Orda{% endblock %}
+
+{% block body %}
+    <h1>Edit Orda</h1>
+
+    {{ include('orda/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('orda_index') }}">back to list</a>
+
+    {{ include('orda/_delete_form.html.twig') }}
+{% endblock %}

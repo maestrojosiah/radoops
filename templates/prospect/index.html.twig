@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Prospects list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Residence</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for prospect in prospects %}
+            <tr>
+                <td><a href="{{ path('prospect_show', { 'id': prospect.id }) }}">{{ prospect.id }}</a></td>
+                <td>{{ prospect.name }}</td>
+                <td>{{ prospect.email }}</td>
+                <td>{{ prospect.phone }}</td>
+                <td>{{ prospect.residence }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('prospect_show', { 'id': prospect.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

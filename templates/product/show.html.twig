@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{asset('lightbox/dist/css/lightbox.min.css')}}">
+{% endblock %}
+{% block carousel %}{% endblock %}
+
+{% block body %}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+        <a href="{{ product.presentations|length > 0 ? asset(product.presentations|last.photoPath ) : '#'  }} " data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
+          <img  src="{{ asset(product.image) }}" class="img-fluid" style="max-height:350px;" alt="">
+        </a>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          <!--Content-->
+          <div class="p-4">
+
+            <div class="mb-3">
+              <a href="{{path('product_category', {'category': product.category.name })}}">
+                <span class="badge purple mr-1">{{product.category.name|capitalize}}</span>
+              </a>
+              <a href="{{path('product_availability', {'availability': product.availability })}}">
+                {% set availability = product.availability|replace({"_": " "})|capitalize %}
+                <span class="badge red mr-1">{{availability}}</span>
+              </a>
+              <a href="{{ asset(product.image )}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
+                <span class="badge green mr-1">Preview</span>
+              </a>
+            </div>
+
+            <p class="lead">
+              <span>Kshs {{product.cost|number_format}}</span>
+            </p>
+
+            <p class="lead font-weight-bold">{{product.title|title}}</p>
+
+            <p>{{product.description|raw|nl2br}}</p>
+
+            <form class="d-flex justify-content-left">
+              <!-- Default input -->
+              <input id="order_qty" type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+              {% if product.id in my_cookies %}
+                <button id="added_to_cart" class="btn btn-success btn-md my-0 p" type="button">Added to cart
+                  <i class="fa fa-shopping-cart ml-1"></i>
+                </button>
+                <a id="proceed" class="btn btn-success btn-md my-0 p" href="{{path('cart')}}">CheckOut
+                  <i class="fa fa-shopping-cart ml-1"></i>
+                </a>
+              {% else %}
+                <button id="add_to_cart" class="btn btn-primary btn-md my-0 p" type="button">Add to cart
+                  <i class="fa fa-shopping-cart ml-1"></i>
+                </button>
+                <span id="more_html"></span>
+              {% endif %}
+            </form>
+
+          </div>
+          <!--Content-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <hr>
+
+      <!--Grid row-->
+      <div class="row d-flex justify-content-center wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 text-center">
+
+          <h4 class="my-4 h4">Related Products</h4>
+
+          <p>There are more products that are under the {{product.category.name}} category. You will find them
+            very helpful. </p>
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        {% for product in related_products %}
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-4">
+
+              <a href="{{path('product_show', {'id': product.id} )}}"><img src="{{asset(product.image)}}" class="img-fluid" style="max-height:300px; cursor:pointer" alt="{{product.title}}"></a>
+
+            </div>
+            <!--Grid column-->
+        {% endfor %}
+
+      </div>
+      <!--Grid row-->
+      {% if app.user and app.user.active == true %}
+          <ul>
+              <li>
+                  <a href="{{ path('product_index') }}">Back to the list</a>
+              </li>
+              <li>
+                  <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
+              </li>
+              <li>
+                  {{ form_start(delete_form) }}
+                      <input type="submit" value="Delete">
+                  {{ form_end(delete_form) }}
+              </li>
+          </ul>
+      {% endif %}
+      {# presentation photos #}
+      {% for presentation in product.presentations %}
+        <a style="display: none;" href="{{asset(presentation.photoPath)}}" data-lightbox="example-set" data-title="{{presentation.description}}."><img class="example-image" src="{{asset(presentation.photoPath)}}" alt="" /></a>
+      {% endfor %}
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+{% endblock %}
+{% block javascripts %}
+  <script src="{{asset('lightbox/dist/js/lightbox-plus-jquery.min.js')}}"></script>
+  <script>
+    $(document).on('click', '#add_to_cart', function(){
+      var product_id = "{{product.id}}";
+      var user_id = 2;
+      var initial_cart_count = $("#cart_count").text();
+      var order_qty = $("#order_qty").val();
+      var new_cart_count = parseInt(initial_cart_count) + 1;
+      $("#cart_count").text(new_cart_count);
+      $.ajax({
+          url:'{{ (path('add_to_cart')) }}',
+          type: "POST",
+          dataType: "json",
+          data: {
+            "product_id": product_id,
+            "user_id": user_id,
+            "order_qty": order_qty,
+          },
+          async: true,
+          success: function (data)
+          {
+            console.log(data);
+            $('#add_to_cart').html('Added to cart').removeClass('btn-primary').addClass('btn-success');
+            var html = '<a id="proceed" class="btn btn-success btn-md my-0 p" href="{{path("cart")}}">CheckOut <i class="fa fa-shopping-cart ml-1"></i></a>';
+            $('#more_html').html(html);
+          },
+          error: function (xhr, status, error) {
+            console.log('error');
+            $('#add_to_cart').html('Added to cart').removeClass('btn-primary').addClass('btn-success');
+            var html = '<a id="proceed" class="btn btn-success btn-md my-0 p" href="{{path("cart")}}">CheckOut <i class="fa fa-shopping-cart ml-1"></i></a>';
+            $('#more_html').html(html);
+          }
+      });
+
+    });
+  </script>
+{% endblock %}

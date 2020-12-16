@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Orda{% endblock %}
+
+{% block body %}
+    <h1>Create new Orda</h1>
+
+    {{ include('orda/_form.html.twig') }}
+
+    <a href="{{ path('orda_index') }}">back to list</a>
+{% endblock %}

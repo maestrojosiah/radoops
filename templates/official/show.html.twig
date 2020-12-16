@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+{% block carousel %}{% endblock %}
+{% block body %}
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+    <h4>Official</h4>
+    <!--Grid row-->
+      <div class="row wow fadeIn">
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ official.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ official.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>{{ official.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ official.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul>
+                <li>
+                    <a href="{{ path('official_index') }}">Back to the list</a>
+                </li>
+                <li>
+                    <a href="{{ path('official_edit', { 'id': official.id }) }}">Edit</a>
+                </li>
+                <li>
+                    {{ form_start(delete_form) }}
+                        <input type="submit" value="Delete">
+                    {{ form_end(delete_form) }}
+                </li>
+            </ul>
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+      </div>
+    </main>
+
+{% endblock %}
