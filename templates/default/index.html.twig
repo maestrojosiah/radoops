@@ -65,7 +65,7 @@
               <!--Card image-->
               <div class="view overlay">
                <img src="{{asset(product.image)}}" class="card-img-top" alt="">
-                <a href="{{path('product_show', {'id': product.id})}}">
+                <a href="{{path('product_show', {'id': product.id, 'title': product.title})}}">
                   <div class="mask rgba-white-slight"></div>
                 </a>
               </div>
@@ -79,7 +79,7 @@
                 </a>
                 <h5>
                   <strong>
-                    <a href="{{path('product_show', {'id': product.id})}}" class="dark-grey-text">{{product.title}}
+                    <a href="{{path('product_show', {'id': product.id, 'title': product.title})}}" class="dark-grey-text">{{product.title}}
                       <span class="badge badge-pill danger-color">{{product.availability}}</span>
                     </a>
                   </strong>

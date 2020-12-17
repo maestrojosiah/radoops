@@ -33,8 +33,8 @@
         <tbody>
         {% for product in products %}
             <tr>
-                <td><a href="{{ path('product_show', { 'id': product.id }) }}"><button class="btn btn-lg" style="background-image:url('{{asset(product.image)}}'); background-repeat: no-repeat; background-position: center; background-size: contain;"></button></a></td>
-                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.title }}</a></td>
+                <td><a href="{{ path('product_show', { 'id': product.id, 'title': product.title }) }}"><button class="btn btn-lg" style="background-image:url('{{asset(product.image)}}'); background-repeat: no-repeat; background-position: center; background-size: contain;"></button></a></td>
+                <td><a href="{{ path('product_show', { 'id': product.id, 'title': product.title }) }}">{{ product.title }}</a></td>
                 {# <td>{{ product.author }}</td> #}
                 <td>{{ product.category.name }}</td>
                 <td>{{ product.cost }}</td>
@@ -42,11 +42,11 @@
                 <td>{{ product.availability }}</td>
                 {# <td>{% if product.uploaded %}{{ product.uploaded|date('Y-m-d H:i:s') }}{% endif %}</td> #}
                 <td>
-                  <a class="btn btn-primary" href="{{ path('product_show', { 'id': product.id }) }}">show</a>
+                  <a class="btn btn-primary" href="{{ path('product_show', { 'id': product.id, 'title': product.title }) }}">show</a>
                 </td>
                 {% if app.user and app.user.active == true %}
                     <td>
-                      <a class="btn btn-info" href="{{ path('presentation_new', { 'bk_id': product.id }) }}">Presentation</a>
+                      <a class="btn btn-info" href="{{ path('presentation_new', { 'bk_id': product.id }) }}">Presentation({{product.presentations|length}})</a>
                     </td>
                 {% endif %}
             </tr>

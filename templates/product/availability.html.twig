@@ -28,14 +28,14 @@
         <tbody>
         {% for product in products %}
             <tr>
-                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.title }}</a></td>
+                <td><a href="{{ path('product_show', { 'id': product.id, 'title': product.title }) }}">{{ product.title }}</a></td>
                 {# <td>{{ product.author }}</td> #}
                 <td>{{ product.category.name }}</td>
                 <td>{{ product.cost }}</td>
                 <td>{{ product.description|length > 50 ? product.description|slice(0, 50) ~ '...' : product.description  }}</td>
                 <td>{{ product.availability }}</td>
                 <td>
-                     <a class="btn btn-primary" href="{{ path('product_show', { 'id': product.id }) }}">show</a>
+                     <a class="btn btn-primary" href="{{ path('product_show', { 'id': product.id, 'title': product.title }) }}">show</a>
                 </td>
             </tr>
         {% endfor %}
