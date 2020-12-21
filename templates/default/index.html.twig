@@ -23,11 +23,12 @@
           <!-- Links -->
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="{{path('product_index')}}">All</a>
+              <a class="nav-link" href="{{path('homepage')}}">All</a>
             </li>
             {% for category in data.categories %}
               <li class="nav-item">
-                <a class="nav-link" href="{{path('product_category',{'category':category})}}">{{category}}</a>
+                <a class="nav-link" href="{{path('homepage',{'page':1, 'category':category})}}">{{category}}</a>
+                {# <a class="nav-link" href="{{path('product_category',{'category':category})}}">{{category}}</a> #}
               </li>
             {% endfor %}
 
@@ -108,11 +109,16 @@
       <!--Pagination-->
       <nav class="d-flex justify-content-center wow fadeIn">
         <ul class="pagination pg-blue">
+        {% if data.category == null %}
+        {% set category = null %}
+        {% else %}
+        {% set category = data.category %}
+        {% endif %}
 
           <!--Arrow left-->
           <li class="page-item disabled">
           {% if data.prevPage and data.prevPage != "blank" and data.prevPage >= 0 %}       
-              <a class="page-link" href="{{path('homepage', {'page': data.prevPage})}}">
+              <a class="page-link" href="{{path('homepage', {'page': data.prevPage, 'category': category })}}">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>              
               </a>
@@ -120,17 +126,17 @@
           </li>
           <li class="page-item active">
           {% if data.prevPage and data.prevPage != "blank" and data.prevPage >= 0 %}       
-              <a class="page-link" href="{{path('homepage', {'page': data.prevPage})}}">Page {{data.prevPage}}</a>
+              <a class="page-link" href="{{path('homepage', {'page': data.prevPage, 'category': category })}}">Page {{data.prevPage}}</a>
           {% endif %}
           </li>
           <li>
           {% if data.nextPage and data.nextPage != "blank" %}       
-              <a class="page-link" href="{{path('homepage', {'page': data.nextPage})}}">Page {{data.nextPage}}</a>
+              <a class="page-link" href="{{path('homepage', {'page': data.nextPage, 'category': category })}}">Page {{data.nextPage}}</a>
           {% endif %}
           </li>
           <li class="page-item">
           {% if data.nextPage and data.nextPage != "blank" %}       
-              <a class="page-link" href="{{path('homepage', {'page': data.nextPage})}}">
+              <a class="page-link" href="{{path('homepage', {'page': data.nextPage, 'category': category })}}">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
               </a>

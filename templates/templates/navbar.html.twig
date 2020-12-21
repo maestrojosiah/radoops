@@ -5,6 +5,7 @@
       <!-- Brand -->
       <a class="navbar-brand waves-effect" href="{{path('homepage')}}">
         <strong class="blue-text">Radoops Kenya</strong>
+        <a class="nav-link waves-effect" href="tel:+254 722 208 151"><strong><i class="fa text-dark fa-phone"></i>&nbsp;0722 208 151</strong></a>
       </a>
 
       <!-- Collapse -->
@@ -29,9 +30,9 @@
           <li class="nav-item">
               <a class="nav-link waves-effect" href="tel:+254 112 532 755"><strong><i class="fa text-dark fa-phone"></i>&nbsp;0112 532 755</strong></a>
           </li>
-          <li class="nav-item">
+          {# <li class="nav-item">
               <a class="nav-link waves-effect" href="tel:+254 722 208 151"><strong><i class="fa text-dark fa-phone"></i>&nbsp;0722 208 151</strong></a>
-          </li>
+          </li> #}
         </ul>
         {% if app.user and app.user.active == 1 %}
           {% include 'templates/le_menu.html.twig' %}

@@ -12,30 +12,46 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/{page}", name="homepage")
+     * @Route("/{page}/{category}", name="homepage")
      */
-    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, $page = 1): Response
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, $page = 1, $category = null): Response
     {
 
         $limit = 12;
         $offset = $page * $limit - $limit;
         $data = [];
+        
 
-        $products = $productRepository
+        if (null == $category){
+            $products = $productRepository
             ->findBy(
                 array('deleted' => 0),
                 array('id' => 'DESC'),
                 $limit,
                 $offset
             );
+        } else {
+            $category =  $categoryRepository->findOneByName($category);
+            $products = $productRepository
+            ->findBy(
+                array('deleted' => 0, 'category' => $category),
+                array('id' => 'DESC'),
+                $limit,
+                $offset
+            );
+
+        }
 
         if($products){
             $data['nextPage'] = $page + 1;
             $data['prevPage'] = $page - 1;
+            $data['category'] = $category;
         } else {
             $data['nextPage'] = "blank";
             $data['prevPage'] = $page - 1;
+            $data['category'] = $category;
         }
+
         $data['numberOfProducts'] = count($products);
         $data['categories'] = $categoryRepository->findOrderedByPriority();
 
@@ -53,7 +69,7 @@ class DefaultController extends AbstractController
         ]);
     }
         /**
-     * @Route("/radoops/about", name="about")
+     * @Route("/radoops/about/us", name="about")
      */
     public function aboutAction(Request $request)
     {
