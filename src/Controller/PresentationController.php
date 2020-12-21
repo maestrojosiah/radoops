@@ -91,6 +91,18 @@ class PresentationController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/unlink", name="presentation_del_photo")
+     */
+    public function deleteOldFile(Request $request, Presentation $presentation): Response
+    {
+        $formerFileName = $presentation->getPhotoPath();
+        $old_filepath = $this->getParameter('public_directory').$formerFileName;
+        if(file_exists($old_filepath)){ unlink($old_filepath); }
+        return $this->redirectToRoute('presentation_edit', array('id' => $presentation->getId(), 'del' => $old_filepath));
+
+    }
+
+    /**
      * Displays a form to edit an existing presentation entity.
      *
      * @Route("/admin/{id}/edit", name="presentation_edit")

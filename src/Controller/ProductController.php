@@ -123,7 +123,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/{title}", name="product_show", methods={"GET"})
+     * @Route("/show/{id}/{title}", name="product_show", methods={"GET"})
      */
     public function show(Product $product): Response
     {
@@ -142,27 +142,41 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @Route("/{id}/unlink", name="product_del_photo")
+     */
+    public function deleteOldFile(Request $request, Product $product): Response
+    {
+        $formerFileName = $product->getImage();
+        $old_filepath = $this->getParameter('public_directory').$formerFileName;
+        var_dump($old_filepath);
+        if(file_exists($old_filepath)){ unlink($old_filepath); }
+        return $this->redirectToRoute('product_edit', array('id' => $product->getId(), 'del' => $old_filepath));
+
+    }
+
+    /**
      * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Product $product): Response
     {
-        $editForm = $this->createForm(ProductType::class, $product);
+        $deleteForm = $this->createDeleteForm($product);
+        $editForm = $this->createForm('App\Form\ProductType', $product);
         $editForm->handleRequest($request);
-        $formerFileName = $product->getImage();
-        $formerTitle = $product->getTitle();
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            
             $image = $editForm->get('image')->getData();
             $category = $editForm->get('category')->getData();
             $now = date("d-m-Y h:i:s");
             $product->setUploaded(new \DateTime($now));            
             $product_title = $editForm->get('title')->getData();
-            $old_product_title = $_POST['old_title'];
-            $trimmed_title = $old_product_title;
-            // var_dump($old_product_title);
+            $trimmed_title = str_replace(" ", "_", $product_title);
              // if (is_object($image)){
+                $product_title = $editForm->get('title')->getData();
+                $trimmed_title = str_replace(" ", "_", $product_title);
                 $originalName = $image->getClientOriginalName();;
                 $filepath = $this->getParameter('prod_img_directory')."/$category/$trimmed_title/";
+
                 $simple_filepath = "/img/products/$category/$trimmed_title/";
                 $image->move($filepath, $originalName);
                 $product->setImage($simple_filepath . $originalName);
@@ -171,7 +185,7 @@ class ProductController extends AbstractController
             // }
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('product_index');
+            return $this->redirectToRoute('product_edit', array('id' => $product->getId()));
         }
 
         return $this->render('product/edit.html.twig', [
@@ -180,6 +194,14 @@ class ProductController extends AbstractController
         ]);
     }
 
+    public static function delTree($dir) {
+        $files = array_diff(scandir($dir), array('.','..'));
+         foreach ($files as $file) {
+           (is_dir("$dir/$file")) ? delTree("$dir/$file") : unlink("$dir/$file");
+         }
+         return rmdir($dir);
+       }
+     
     /**
      * @Route("/{id}", name="product_delete", methods={"DELETE"})
      */
@@ -189,9 +211,13 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $product->setDeleted(1);
+            // $product->setDeleted(1);
+            $category = $product->getCategory();
+            $trimmed_title = str_replace(" ", "_", $product->getTitle());
+            $folder = $this->getParameter('prod_img_directory')."/$category/$trimmed_title";
+            $this->delTree($folder);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
+            $em->remove($product);
             $em->flush();
         }
 
